@@ -5,6 +5,7 @@ def exception_details(error, error_detail:sys) -> str:
     _,_,exc_tb = error_detail.exc_info()
     filename = exc_tb.tb_frame.f_code.co_filename
     error_message = f"Error occurred in {filename}, line number {exc_tb.tb_lineno}: str(error)"
+    logging.info(error_message)
     return error_message
 
 class CustomException(Exception):
