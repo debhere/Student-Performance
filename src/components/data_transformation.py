@@ -24,15 +24,15 @@ class DataTransformation:
         #self.data_transformation_config = DataTransformationConfig()
         #self.utils = ArtifactConfig()
 
-    def get_data_transformer_object(self):
+    def get_column_info(self):
         '''
         This function is responsible for our data transformation
         '''
 
         try:
             num_cols = ["writing score", 'reading score']
-            cat_cols = ['gender', 'race ethnicity', 'parental level of education', 'lunch',
-                        'test preparation score']
+            cat_cols = ['gender', 'race/ethnicity', 'parental level of education', 'lunch',
+                        'test preparation course']
             
             # num_pipeline = Pipeline(
             #     [('imputer', SimpleImputer(strategy="median")),
@@ -68,26 +68,32 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys)
         
-    def initiate_data_transformation(self, train_path, test_path):
+    def initiate_data_transformation(self, data_path):
         try:
-            train_df = pd.read_csv(train_path)
-            test_df = pd.read_csv(test_path)
+            
+            # train_df = pd.read_csv(train_path)
+            # test_df = pd.read_csv(test_path)
+
+            data_df = pd.read_csv(data_path)
 
             logging.info("Reading training & test data")
 
             logging.info("Obtaining preproccessing object")
 
-            preprocessor_obj = self.get_data_transformer_object()
+            #preprocessor_obj = self.get_data_transformer_object()
 
             target_column_name = "math score"
-            num_cols = ["writing score", 'reading score']
+            #num_cols = ["writing score", 'reading score']
 
-            input_feature_train_df = train_df.drop(columns = target_column_name, axis=1)
-            target_feature_train_df = train_df[target_column_name]
+            X = data_df.drop(columns=target_column_name, axis=1)
+            y = data_df[target_column_name]
+            #input_feature_train_df = train_df.drop(columns = target_column_name, axis=1)
+            #target_feature_train_df = train_df[target_column_name]
 
-            input_feature_test_df = test_df.drop(columns = target_column_name, axis=1)
-            target_feature_test_df = test_df[target_column_name]
+            # input_feature_test_df = test_df.drop(columns = target_column_name, axis=1)
+            # target_feature_test_df = test_df[target_column_name]
 
+            return X, y
 
-        except:
-            pass
+        except Exception as e:
+            raise CustomException(e, sys)

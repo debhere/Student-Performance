@@ -32,7 +32,7 @@ class BaseConfigLoader:
         raise CustomException(e, sys)
 
 
-def create_path(self, root_folder, main_folder, filename):
+def create_path(root_folder, main_folder, filename):
     '''
     Creating the folder structure as applicable
     '''
@@ -89,7 +89,7 @@ class DataArtifactConfig:
                                              self.base_config.source_data_file)
                 
                 file_path = source_data_path
-                logging.info("Actual data being fetched")
+                logging.info("Real data being fetched")
                 
             elif filetype == "train" or filetype == "test" or filetype == "raw":
                 train_test_data_path = create_path(self.base_config.artifacts_base_folder,

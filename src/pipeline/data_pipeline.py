@@ -1,7 +1,7 @@
 import sys
 from src.exception import CustomException
 from src.logger import logging
-from src.utils.artifacts_utils import ArtifactConfig
+from src.utils.artifacts_utils import PipelineArtifactConfig
 
 from src.components.data_transformation import DataTransformation
 from src.components.data_ingestion import DataIngestion
@@ -17,15 +17,15 @@ from sklearn.compose import ColumnTransformer
 class DataPipeline:
     def __init__(self):
         logging.info("Creating data pipeline")
-        self.utils = ArtifactConfig()
+        self.utils = PipelineArtifactConfig()
         self.data_trans = DataTransformation()
         self.ingestion = DataIngestion()
 
     
-    def create_pipeline(self, X):
+    def create_pipeline(self):
 
         try:
-            num_cols, cat_cols = self.data_trans.get_data_transformer_object()
+            num_cols, cat_cols = self.data_trans.get_column_info()
 
             num_pipeline = Pipeline(
                 [
@@ -37,7 +37,8 @@ class DataPipeline:
             cat_pipeline = Pipeline(
                 [
                     ('imputer', SimpleImputer(strategy="most_frequent")),
-                    ('scale', StandardScaler())
+                    ('one_hot', OneHotEncoder()),
+                    ('scale', StandardScaler(with_mean=False))
 
             ])
 
@@ -48,7 +49,7 @@ class DataPipeline:
                 
             ])
 
-            pipeline_path = self.utils.save_object_artifact("data_pipeline.pkl")
+            pipeline_path = self.utils.save_data_pipeline("data_pipeline.pkl")
             return data_trans_pipeline
         
         except Exception as e:
