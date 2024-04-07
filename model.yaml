@@ -1,0 +1,8 @@
+#For the sake of similicity, tuning only 2 models
+
+RandomForestRegressor:
+  n_estimators: [80, 100, 120, 200]
+  criterion: ["squared_error", "absolute_error", "friedman_mse", "poisson"]
+GradientBoostingRegressor:
+  n_estimators: [80, 100, 120, 200]
+  criterion: ["squared_error", "friedman_mse"]

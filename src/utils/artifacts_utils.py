@@ -119,20 +119,20 @@ class PipelineArtifactConfig:
         self.data_pipeline = None
         self.model_pipeline = None
 
-    def save_data_pipeline(self, filename):
+    def save_data_pipeline(self, filename, pipeline_obj):
         root_folder = self.base_config.artifacts_base_folder
         data_pipeline_folder = self.base_config.pipeline_artifacts_folder
         self.data_pipeline = create_path(root_folder=root_folder, main_folder=data_pipeline_folder, filename=filename)
-        joblib.dump("data_pipeline", self.data_pipeline)
+        joblib.dump(pipeline_obj, self.data_pipeline)
 
     def get_data_pipeline(self):
         return self.data_pipeline
     
-    def save_model_pipeline(self, filename):
+    def save_model_pipeline(self, filename, model_obj):
         root_folder = self.base_config.artifacts_base_folder
         model_pipeline_folder = self.base_config.pipeline_artifacts_folder
         self.model_pipeline = create_path(root_folder=root_folder, main_folder=model_pipeline_folder, filename=filename)
-        joblib.dump("data_pipeline", self.model_pipeline)
+        joblib.dump(model_obj, self.model_pipeline)
     
     def get_model_pipeline(self):
         return self.model_pipeline

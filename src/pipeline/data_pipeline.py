@@ -49,12 +49,9 @@ class DataPipeline:
                 
             ])
 
-            pipeline_path = self.utils.save_data_pipeline("data_pipeline.pkl")
+            #pipeline_path = 
+            self.utils.save_data_pipeline("data_pipeline.pkl", data_trans_pipeline)
             return data_trans_pipeline
         
         except Exception as e:
             raise Exception(e, sys)
-        
-
-class ModelPipeline:
-    pass

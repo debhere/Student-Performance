@@ -6,22 +6,34 @@ from src.components.data_transformation import DataTransformation
 from src.pipeline.data_pipeline import DataPipeline
 from src.components.model_trainer import ModelTrainer
 
+
 def start_training():
     try:
+        logging.info("Starting data imgestion...!!!")
         ingestion = DataIngestion()
         train_data, test_data = ingestion.initiate_data_ingestion()
         
+        logging.info("Starting data transformation...!!!")
         data_transformtion = DataTransformation()
         X_train, y_train = data_transformtion.initiate_data_transformation(train_data)
         
+        logging.info("Starting data pipeline creation...!!!")
         pipeline_obj = DataPipeline()
         data_pipeline = pipeline_obj.create_pipeline()
-        print(X_train.columns)
         X_train_trans = data_pipeline.fit_transform(X_train)
 
+        logging.info("Starting base model scoring...!!!")
         trainer_obj = ModelTrainer()
-        report = trainer_obj.get_model_score(X_train_trans, y_train)
-        return report
+        base_model_score = trainer_obj.get_base_model_score(X_train_trans, y_train)
+        
+        logging.info("Starting model evauation on test data...!!!")
+        X_test, y_test = data_transformtion.initiate_data_transformation(test_data)
+        X_test_trans = data_pipeline.fit_transform(X_test)
+        test_pred_score = trainer_obj.evaluate_base_model_on_test(X_train_trans, y_train, X_test_trans, y_test)
+
+        trainer_obj.model_tuning(X_train_trans, y_train)
+
+        return base_model_score, test_pred_score
     
     except Exception as e:
         print(e)
@@ -32,7 +44,12 @@ def start_training():
 if __name__ == "__main__":
     try:
         logging.info("Training Started")
-        print(start_training())
+        base_score, pred_score = start_training()
+        logging.info("Training and evaluation completed for base models")
+        print(base_score)
+        print()
+        print(pred_score)
+
     except Exception as e:
         raise CustomException(e, sys)
 
