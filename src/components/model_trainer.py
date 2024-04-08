@@ -84,7 +84,7 @@ class ModelTrainer:
 
                 pipe = PipelineArtifactConfig()
                 pipe.save_model_pipeline("best_estimator.pkl", estimator_list[best_score])
-                return estimator_list[best_score]
+                return estimator_list[best_score], best_score
                 
             except Exception as e:
                 raise CustomException(e, sys)

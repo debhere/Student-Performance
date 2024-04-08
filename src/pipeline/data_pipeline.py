@@ -22,7 +22,7 @@ class DataPipeline:
         self.ingestion = DataIngestion()
 
     
-    def create_pipeline(self):
+    def create_pipeline(self, X):
 
         try:
             num_cols, cat_cols = self.data_trans.get_column_info()
@@ -50,6 +50,8 @@ class DataPipeline:
             ])
 
             #pipeline_path = 
+            
+            data_trans_pipeline.fit(X)
             self.utils.save_data_pipeline("data_pipeline.pkl", data_trans_pipeline)
             return data_trans_pipeline
         

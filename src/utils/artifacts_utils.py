@@ -114,30 +114,45 @@ class DataArtifactConfig:
 
 
 class PipelineArtifactConfig:
+    
+    data_pipeline = None
+    model_pipeline = None
+
     def __init__(self):
         self.base_config = BaseConfigLoader()
-        self.data_pipeline = None
-        self.model_pipeline = None
 
     def save_data_pipeline(self, filename, pipeline_obj):
         root_folder = self.base_config.artifacts_base_folder
         data_pipeline_folder = self.base_config.pipeline_artifacts_folder
-        self.data_pipeline = create_path(root_folder=root_folder, main_folder=data_pipeline_folder, filename=filename)
-        joblib.dump(pipeline_obj, self.data_pipeline)
+        PipelineArtifactConfig.data_pipeline = create_path(root_folder=root_folder, main_folder=data_pipeline_folder, filename=filename)
+        joblib.dump(pipeline_obj, PipelineArtifactConfig.data_pipeline)
 
     def get_data_pipeline(self):
-        return self.data_pipeline
+        return PipelineArtifactConfig.data_pipeline
     
     def save_model_pipeline(self, filename, model_obj):
         root_folder = self.base_config.artifacts_base_folder
         model_pipeline_folder = self.base_config.pipeline_artifacts_folder
-        self.model_pipeline = create_path(root_folder=root_folder, main_folder=model_pipeline_folder, filename=filename)
-        joblib.dump(model_obj, self.model_pipeline)
+        PipelineArtifactConfig.model_pipeline = create_path(root_folder=root_folder, main_folder=model_pipeline_folder, filename=filename)
+        joblib.dump(model_obj, PipelineArtifactConfig.model_pipeline)
     
     def get_model_pipeline(self):
-        return self.model_pipeline
+        return PipelineArtifactConfig.model_pipeline
     
 
 
+def load_object(type='model'):
+    model_file = "artifacts/pipeline/best_estimator.pkl"
+    data_trans = "artifacts/pipeline/data_pipeline.pkl"
 
+    file_path = ''
+    try:
+        if type == 'model':
+            file_path = model_file
+        else:
+            file_path = data_trans
 
+        with open(file_path, 'rb') as f:
+            return joblib.load(file_path)
+    except:
+        pass
